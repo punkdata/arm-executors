@@ -9,15 +9,14 @@ jobs:
     steps:
       - checkout
       - run:
+          name: "Build Docker Image ARM V8"
           command: |
             echo "What up ARM"
             export TAG=0.1.<< pipeline.number >>
             export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME
-            # docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
+            docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker buildx build --push \
-            --platform linux/arm64/v8,linux/amd64 \
-            --tag $DOCKER_LOGIN/$IMAGE_NAME --tag $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
+            docker push $DOCKER_LOGIN/$IMAGE_NAME
 workflows:
   build:
     jobs:
