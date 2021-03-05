@@ -14,9 +14,9 @@ jobs:
             export TAG=0.1.<< pipeline.number >>
             export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME
             # docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
-            docker login -u "$DOCKER_LOGIN" -p "$DOCKER_PWD" --password-stdin
+            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker buildx build --push \
-            --platform linux/arm64/v8,linux/amd64
+            --platform linux/arm64/v8,linux/amd64 \
             --tag $DOCKER_LOGIN/$IMAGE_NAME --tag $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
 workflows:
   build:
