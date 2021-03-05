@@ -12,7 +12,7 @@ jobs:
           name: "Build Docker Image ARM V8"
           command: |
             echo "What up ARM"
-            export TAG=0.1.<< pipeline.number >>
+            export TAG='0.1.<< pipeline.number >>'
             export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME
             docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
