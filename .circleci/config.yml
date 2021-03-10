@@ -1,8 +1,27 @@
 # Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 # Use a package of configuration called an orb.
+orbs:
+  node: circleci/node@4.2.0
+  snyk: snyk/snyk@0.0.13
 jobs:
-  prep-arm-env:
+  scan_app:
+    machine:
+      image: ubuntu-2004:202101-01
+      resource_class: arm.medium
+    steps:
+      - checkout
+      - node/install-packages
+      - run:
+          command: npm run test
+      - run:
+          name: Snyk Scan Application files 
+          command: |
+            sudo npm -g install 
+      - snyk/scan:
+          fail-on-issues: false
+          monitor-on-build: false
+  build_docker_image:
     machine:
       image: ubuntu-2004:202101-01
     resource_class: arm.medium
@@ -11,7 +30,6 @@ jobs:
       - run:
           name: "Build Docker Image ARM V8"
           command: |
-            echo "What up ARM"
             export TAG='0.1.<< pipeline.number >>'
             export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME
             docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
@@ -20,4 +38,5 @@ jobs:
 workflows:
   build:
     jobs:
-      - prep-arm-env
+      - scan_app
+      - build_docker_image
