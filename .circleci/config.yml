@@ -11,13 +11,13 @@ jobs:
       resource_class: arm.medium
     steps:
       - checkout
-      - node/install-packages
-      - run:
-          command: npm run test
-      - run:
-          name: Snyk Scan Application files 
-          command: |
-            sudo npm -g install 
+      - node/install-packages:
+          cache-path: ~/project/node_modules
+          override-ci-command: npm install
+      # - run:
+      #     name: Snyk Scan Application files 
+      #     command: |
+      #       sudo npm -g install 
       - snyk/scan:
           fail-on-issues: false
           monitor-on-build: false
@@ -39,4 +39,4 @@ workflows:
   build:
     jobs:
       - scan_app
-      - build_docker_image
+      # - build_docker_image
