@@ -5,19 +5,23 @@ orbs:
   node: circleci/node@4.2.0
   snyk: snyk/snyk@0.0.13
 jobs:
-  scan_app:
+  run-tests:
     machine:
       image: ubuntu-2004:202101-01
       resource_class: arm.medium
     steps:
       - checkout
       - node/install-packages:
-          override-ci-command: npm install && npm install snyk 
+          override-ci-command: npm install
           cache-path: ~/project/node_modules
-          
-      - snyk/scan:
-          fail-on-issues: false
-          monitor-on-build: false
+      - run:
+          name: Run Unit Tests
+          command: |
+            ./node_modules/mocha/bin/mocha test/ --reporter mochawesome --reporter-options reportDir=test-results,reportFilename=test-results
+      - store_test_results:
+          path: test-results
+      - store_artifacts:
+          path: test-results          
   build_docker_image:
     machine:
       image: ubuntu-2004:202101-01
@@ -35,5 +39,5 @@ jobs:
 workflows:
   build:
     jobs:
-      - scan_app
+      - run-tests
       # - build_docker_image
