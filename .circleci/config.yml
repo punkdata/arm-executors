@@ -12,15 +12,16 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
+          override-ci-command: npm install && npm install snyk 
           cache-path: ~/project/node_modules
-          override-ci-command: npm install
+          
       # - run:
       #     name: Snyk Scan Application files 
       #     command: |
       #       sudo npm -g install 
-      - snyk/scan:
-          fail-on-issues: false
-          monitor-on-build: false
+      # - snyk/scan:
+      #     fail-on-issues: false
+      #     monitor-on-build: false
   build_docker_image:
     machine:
       image: ubuntu-2004:202101-01
