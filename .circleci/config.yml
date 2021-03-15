@@ -23,7 +23,7 @@ commands:
               parameters.arch >>.zip
             unzip terraform_<< parameters.version >>_linux_<<
               parameters.arch >>.zip
-            $SUDO mv terraform /usr/local/bin
+            sudo mv terraform /usr/local/bin
 jobs:
   run-tests:
     machine:
