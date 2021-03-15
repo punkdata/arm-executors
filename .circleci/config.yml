@@ -70,7 +70,7 @@ jobs:
           version: 0.14.2
           arch: arm64    
       - run:
-          name: Deploy Application to K8s on DigitalOcean 
+          name: Deploy Application to AWS ECS Cluster
           command: |
             export TAG=0.0.<< pipeline.number >>
             export DOCKER_IMAGE_NAME="${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME}"
