@@ -78,8 +78,8 @@ jobs:
             terraform init
             terraform apply \
               -var docker_img_name=$DOCKER_IMAGE_NAME \
-              -var docker_img_tag=$TAG
-              -auto-approve  
+              -var docker_img_tag=$TAG \
+              --auto-approve  
 
 workflows:
   build:
