@@ -3,7 +3,28 @@ version: 2.1
 # Use a package of configuration called an orb.
 orbs:
   node: circleci/node@4.2.0
-  snyk: snyk/snyk@0.0.13
+commands:
+  description: "specify terraform version & architecture to use [amd64 or arm64]"
+  install_terraform:
+    parameters:
+      version:
+        type: string
+        default: "0.13.5"
+      arch:
+        type: string
+        default: "arm64"
+    steps:
+      - checkout
+      - run:
+          name: Install Terraform client
+          command: |
+            wget https://releases.hashicorp.com/terraform/<<
+              parameters.terraform_version >>/terraform_<<
+              parameters.terraform_version >>_linux_<< 
+              parameters.terraform_arch >>.zip
+            unzip terraform_<< parameters.terraform_version >>_linux_<<
+              parameters.terraform_arch >>.zip
+            $SUDO mv terraform /usr/local/bin
 jobs:
   run-tests:
     machine:
@@ -36,8 +57,33 @@ jobs:
             docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
             echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
             docker push -a $DOCKER_LOGIN/$IMAGE_NAME
+  deploy_aws_ecs:
+    machine:
+      image: ubuntu-2004:202101-01
+    resource_class: arm.medium
+    steps:
+      - checkout
+      - run:
+          name: Create .terraformrc file locally
+          command: echo "credentials \"app.terraform.io\" {token = \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
+      - install_terraform:
+          version: 0.14.2
+          arch: arm64
+      - run:
+          name: Deploy Application to K8s on DigitalOcean 
+          command: |
+            export TAG=0.0.<< pipeline.number >>
+            export DOCKER_IMAGE_NAME="${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME}"
+            cd terraform/aws/ecs
+            terraform init
+            terraform apply \
+              -var docker_img_name=$DOCKER_IMAGE_NAME \
+              -var docker_img_tag=$TAG
+              -auto-approve  
+
 workflows:
   build:
     jobs:
       - run-tests
-      # - build_docker_image
+      - build_docker_image
+      - deploy_aws_ecs

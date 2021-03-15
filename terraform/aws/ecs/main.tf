@@ -24,7 +24,8 @@ data "template_file" "task_definition_json" {
   template = file("${path.module}/task_definition.json")
 
   vars = {
-    DOCKER_IMAGE_NAME = var.docker_image_name
+    DOCKER_IMAGE_NAME = var.docker_img_name
+    DOCKER_IMAGE_TAG = var.docker_img_tag
   }
 }
 
@@ -194,7 +195,7 @@ resource "aws_cloudwatch_log_group" "awslogs-app-arm" {
   }
 }
 
-# AWS Application Load Balancer
+# AWS Application Load Balancer Target Group
 resource "aws_alb_target_group" "alb" {
   name     = "app-arm-v8"
   port     = 80
@@ -208,6 +209,7 @@ resource "aws_alb_target_group" "alb" {
   }
 }
 
+#AWS Application Load Balancer
 resource "aws_alb" "main" {
   name = "app-arm-v8"
   subnets = [
@@ -223,6 +225,7 @@ resource "aws_alb" "main" {
   }
 }
 
+#AWS App Load Balancer Listener
 resource "aws_alb_listener" "front_end" {
   load_balancer_arn = aws_alb.main.id
   port              = "80"
@@ -233,15 +236,18 @@ resource "aws_alb_listener" "front_end" {
   }
 }
 
+#AWS ECS Task definition
 resource "aws_ecs_task_definition" "app-arm-v8" {
   family                = "app-arm"
   container_definitions = data.template_file.task_definition_json.rendered
 }
 
+#AWS ECS Cluster
 resource "aws_ecs_cluster" "app-arm-v8" {
   name = "app-arm-v8"
 }
 
+#AWS ECS Service
 resource "aws_ecs_service" "app-arm-v8" {
   name                               = "srv_app-arm-v8"
   cluster                            = aws_ecs_cluster.app-arm-v8.name

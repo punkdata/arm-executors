@@ -44,10 +44,15 @@ variable "asg_desired" {
   default     = 2
 }
 
-variable "docker_image_name" {
+variable "docker_img_name" {
   type        = string
+  description = "Name of the docker image being deployed"  
   default     = "ariv3ra/arm-executors"
-  description = "Name of the docker image being deployed"
 }
 
+variable "docker_img_tag" {
+  type        = string
+  description = "The docker image TAG being deployed"  
+  default     = "latest"
+}
 
