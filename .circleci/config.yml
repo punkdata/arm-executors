@@ -72,7 +72,7 @@ jobs:
       - run:
           name: Deploy Application to AWS ECS Cluster
           command: |
-            export TAG=0.0.<< pipeline.number >>
+            export TAG=0.1.<< pipeline.number >>
             export DOCKER_IMAGE_NAME="${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME}"
             cd terraform/aws/ecs
             terraform init
