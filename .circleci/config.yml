@@ -4,8 +4,8 @@ version: 2.1
 orbs:
   node: circleci/node@4.2.0
 commands:
-  description: "specify terraform version & architecture to use [amd64 or arm64]"
   install_terraform:
+    description: "specify terraform version & architecture to use [amd64 or arm64]"
     parameters:
       version:
         type: string
@@ -19,17 +19,17 @@ commands:
           name: Install Terraform client
           command: |
             wget https://releases.hashicorp.com/terraform/<<
-              parameters.terraform_version >>/terraform_<<
-              parameters.terraform_version >>_linux_<< 
-              parameters.terraform_arch >>.zip
-            unzip terraform_<< parameters.terraform_version >>_linux_<<
-              parameters.terraform_arch >>.zip
+              parameters.version >>/terraform_<<
+              parameters.version >>_linux_<< 
+              parameters.arch >>.zip
+            unzip terraform_<< parameters.version >>_linux_<<
+              parameters.arch >>.zip
             $SUDO mv terraform /usr/local/bin
 jobs:
   run-tests:
     machine:
       image: ubuntu-2004:202101-01
-      resource_class: arm.medium
+    resource_class: arm.medium
     steps:
       - checkout
       - node/install-packages:
