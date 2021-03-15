@@ -24,7 +24,7 @@ data "template_file" "task_definition_json" {
   template = file("${path.module}/task_definition.json")
 
   vars = {
-    DOCKER_IMAGE_NAME = var.docker_img_name
+    DOCKER_IMAGE_NAME = var.docker_img_name,
     DOCKER_IMAGE_TAG = var.docker_img_tag
   }
 }

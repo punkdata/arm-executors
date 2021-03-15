@@ -10,7 +10,7 @@
     ],
     "essential": true,
     "name": "app-arm",
-    "image": "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG",
+    "image": "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}",
     "environment": [],
     "command": [],
     "volumesFrom": [],

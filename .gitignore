@@ -96,3 +96,4 @@ website/vendor
 namecheap.tf
 cicd_demo_gcp_creds.json
 *.pyc
+.terraform.lock.hcl
