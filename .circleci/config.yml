@@ -14,7 +14,6 @@ commands:
         type: string
         default: "arm64"
     steps:
-      - checkout
       - run:
           name: Install Terraform client
           command: |
@@ -62,13 +61,13 @@ jobs:
       image: ubuntu-2004:202101-01
     resource_class: arm.medium
     steps:
-      - checkout
       - run:
           name: Create .terraformrc file locally
           command: echo "credentials \"app.terraform.io\" {token = \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
       - install_terraform:
           version: 0.14.2
-          arch: arm64
+          arch: arm64    
+      - checkout
       - run:
           name: Deploy Application to K8s on DigitalOcean 
           command: |
