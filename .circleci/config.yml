@@ -78,7 +78,7 @@ jobs:
           path: ./terraform/aws/ecs
       - terraform/plan:
           path: ./terraform/aws/ecs
-          workspace: "arm-aws-ecs"          
+          local_state: false
       - terraform/apply:
           path: ./terraform/aws/ecs
           workspace: "arm-aws-ecs"          
