@@ -109,6 +109,8 @@ jobs:
           os: "linux"
       - terraform/init:
           path: ./terraform/aws/ecs
+      - terraform/plan:
+          path: ./terraform/aws/ecs          
       - terraform/destroy:
           path: ./terraform/aws/ecs
       # - run:
