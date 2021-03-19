@@ -78,12 +78,11 @@ jobs:
           path: ./terraform/aws/ecs
       - terraform/plan:
           path: ./terraform/aws/ecs
-          local_state: true
-      # - terraform/apply:
-      #     path: ./terraform/aws/ecs
-      #     workspace: "arm-aws-ecs"          
-      #     var: "docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME},docker_img_tag=0.1.<< pipeline.number >>"
-
+          local_state: false
+      - terraform/apply:
+          path: ./terraform/aws/ecs
+          local_state: false
+          var: "docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME},docker_img_tag=0.1.<< pipeline.number >>"
       # - run:
       #     name: Deploy Application to AWS ECS Cluster
       #     command: |
@@ -116,11 +115,10 @@ jobs:
           path: ./terraform/aws/ecs
       - terraform/plan:
           path: ./terraform/aws/ecs
-          workspace: "arm-aws-ecs"          
+          local_state: false
       - terraform/destroy:
           path: ./terraform/aws/ecs
-          workspace: "arm-aws-ecs"          
-
+          local_state: false
       # - run:
       #     name: Destroy the AWS ECS Cluster
       #     command: |
@@ -133,10 +131,10 @@ workflows:
       - run-tests
       - build_docker_image
       - deploy_aws_ecs
-      # - approve_destroy:
-      #     type: approval
-      #     requires:
-      #       - deploy_aws_ecs
-      # - destroy_aws_ecs:
-      #     requires:
-      #       - approve_destroy
+      - approve_destroy:
+          type: approval
+          requires:
+            - deploy_aws_ecs
+      - destroy_aws_ecs:
+          requires:
+            - approve_destroy
