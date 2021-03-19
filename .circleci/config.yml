@@ -76,8 +76,10 @@ jobs:
           path: ./terraform/aws/ecs
       - terraform/plan:
           path: ./terraform/aws/ecs
+          workspace: "arm-aws-ecs"          
       - terraform/apply:
           path: ./terraform/aws/ecs
+          workspace: "arm-aws-ecs"          
           var: "docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME},docker_img_tag=0.1.<< pipeline.number >>"
       # - run:
       #     name: Deploy Application to AWS ECS Cluster
@@ -110,9 +112,12 @@ jobs:
       - terraform/init:
           path: ./terraform/aws/ecs
       - terraform/plan:
-          path: ./terraform/aws/ecs          
+          path: ./terraform/aws/ecs
+          workspace: "arm-aws-ecs"          
       - terraform/destroy:
           path: ./terraform/aws/ecs
+          workspace: "arm-aws-ecs"          
+
       # - run:
       #     name: Destroy the AWS ECS Cluster
       #     command: |
