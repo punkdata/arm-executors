@@ -74,6 +74,8 @@ jobs:
           os: "linux"
       - terraform/init:
           path: ./terraform/aws/ecs
+      - terraform/plan:
+          path: ./terraform/aws/ecs
       - terraform/apply:
           path: ./terraform/aws/ecs
           var: "docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME},docker_img_tag=0.1.<< pipeline.number >>"
