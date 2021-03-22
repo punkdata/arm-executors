@@ -1,31 +1,8 @@
 version: 2.1
 orbs:
   node: circleci/node@4.2.0
-  # terraform: circleci/terraform@1.3.1
   terraform: circleci/terraform@dev:alpha
-
-# commands:
-#   install_terraform:
-#     description: "specify terraform version & architecture to use [amd64 or arm64]"
-#     parameters:
-#       version:
-#         type: string
-#         default: "0.13.5"
-#       arch:
-#         type: string
-#         default: "arm64"
-#     steps:
-#       - run:
-#           name: Install Terraform client
-#           command: |
-#             cd /tmp
-#             wget https://releases.hashicorp.com/terraform/<<
-#               parameters.version >>/terraform_<<
-#               parameters.version >>_linux_<< 
-#               parameters.arch >>.zip
-#             unzip terraform_<< parameters.version >>_linux_<<
-#               parameters.arch >>.zip
-#             sudo mv terraform /usr/local/bin
+  docker: circleci/docker@1.5.0
 jobs:
   run-tests:
     machine:
@@ -50,14 +27,15 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
-      - run:
-          name: "Build Docker Image ARM V8"
-          command: |
-            export TAG='0.1.<< pipeline.number >>'
-            export IMAGE_NAME=$CIRCLE_PROJECT_REPONAME
-            docker build -t $DOCKER_LOGIN/$IMAGE_NAME -t $DOCKER_LOGIN/$IMAGE_NAME:$TAG .
-            echo $DOCKER_PWD | docker login -u $DOCKER_LOGIN --password-stdin
-            docker push -a $DOCKER_LOGIN/$IMAGE_NAME
+      - docker/check
+      - docker/build:
+          image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
+          tag: 0.1.<< pipeline.number >>
+      - docker/push:
+          docker-username: $DOCKER_LOGIN
+          docker-password: $DOCKER_PWD
+          image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
+          tag: 0.1.<< pipeline.number >>
   deploy_aws_ecs:
     machine:
       image: ubuntu-2004:202101-01
@@ -67,9 +45,6 @@ jobs:
       - run:
           name: Create .terraformrc file locally
           command: echo "credentials \"app.terraform.io\" {token = \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
-      # - install_terraform:
-      #     version: 0.14.2
-      #     arch: arm64
       - terraform/install:
           terraform_version: "0.14.2"
           arch: "arm64"
@@ -83,18 +58,6 @@ jobs:
           path: ./terraform/aws/ecs
           local_state: false
           var: "docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME},docker_img_tag=0.1.<< pipeline.number >>"
-      # - run:
-      #     name: Deploy Application to AWS ECS Cluster
-      #     command: |
-      #       export TAG=0.1.<< pipeline.number >>
-      #       export DOCKER_IMAGE_NAME="${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME}"
-
-      #       cd terraform/aws/ecs
-      #       terraform init
-      #       terraform apply \
-      #         -var docker_img_name=$DOCKER_IMAGE_NAME \
-      #         -var docker_img_tag=$TAG \
-      #         --auto-approve
   destroy_aws_ecs:
     machine:
       image: ubuntu-2004:202101-01
@@ -104,9 +67,6 @@ jobs:
       - run:
           name: Create .terraformrc file locally
           command: echo "credentials \"app.terraform.io\" {token = \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
-      # - install_terraform:
-      #     version: 0.14.2
-      #     arch: arm64    
       - terraform/install:
           terraform_version: "0.14.2"
           arch: "arm64"
@@ -119,12 +79,6 @@ jobs:
       - terraform/destroy:
           path: ./terraform/aws/ecs
           local_state: false
-      # - run:
-      #     name: Destroy the AWS ECS Cluster
-      #     command: |
-      #       cd terraform/aws/ecs
-      #       terraform init
-      #       terraform destroy --auto-approve              
 workflows:
   build:
     jobs:
