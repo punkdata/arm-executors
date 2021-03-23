@@ -33,8 +33,6 @@ jobs:
           image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
           tag: 0.1.<< pipeline.number >>
       - docker/push:
-          docker-username: $DOCKER_LOGIN
-          docker-password: $DOCKER_PWD
           image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
           tag: 0.1.<< pipeline.number >>
   deploy_aws_ecs:
