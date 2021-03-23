@@ -1,11 +1,13 @@
 terraform {
-  backend "remote" {
-    organization = "datapunks"
+  required_version = ">= 0.13.5"
+  # backend "remote" {
+  #   # organization = "datapunks"
 
-    workspaces {
-      name = "arm-aws-ecs"
-    }
-  }
+  #   # workspaces {
+  #   #   name = "arm-aws-ecs"
+  #   #   # prefix = "arm-aws-ecs-"
+  #   # }
+  # }
 }
 
 provider "aws" {
