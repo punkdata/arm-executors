@@ -1,13 +1,8 @@
 terraform {
   required_version = ">= 0.13.5"
-  # backend "remote" {
-  #   # organization = "datapunks"
-
-  #   # workspaces {
-  #   #   name = "arm-aws-ecs"
-  #   #   # prefix = "arm-aws-ecs-"
-  #   # }
-  # }
+  backend "remote" {
+    # See the remote.hcl file for the backend parameters and values
+  }
 }
 
 provider "aws" {
