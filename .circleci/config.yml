@@ -55,12 +55,10 @@ jobs:
       - terraform/plan:
           path: ./terraform/aws/ecs
           # local_state: false
-          backend: true
           backend_config_file: .terraform/aws/ecs/remote.hcl
       - terraform/apply:
           path: ./terraform/aws/ecs
           # local_state: false
-          backend: true
           backend_config_file: .terraform/aws/ecs/remote.hcl
           var: "docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME},docker_img_tag=0.1.<< pipeline.number >>"
   destroy_aws_ecs:
@@ -78,12 +76,10 @@ jobs:
           os: "linux"
       - terraform/init:
           path: ./terraform/aws/ecs
-          backend: true
           backend_config_file: .terraform/aws/ecs/remote.hcl
       - terraform/plan:
           path: ./terraform/aws/ecs
           # local_state: false
-          backend: true
           backend_config_file: .terraform/aws/ecs/remote.hcl
       - terraform/destroy:
           path: ./terraform/aws/ecs
