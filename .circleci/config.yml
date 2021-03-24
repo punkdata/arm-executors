@@ -52,6 +52,7 @@ jobs:
           path: ./terraform/aws/ecs
           # backend: true
           # backend_config_file: ./terraform/aws/ecs/remote.hcl
+          #
       - terraform/plan:
           path: ./terraform/aws/ecs
           # backend_config_file: ./terraform/aws/ecs/remote.hcl
