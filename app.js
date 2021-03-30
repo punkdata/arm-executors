@@ -7,6 +7,8 @@ function welcomeMessage(){
     return message;
 }
 
+// Add version number call later
+
 // set the view engine to ejs
 app.set('view engine', 'ejs');
 
