@@ -1,7 +1,8 @@
 var express = require('express');
 var app = express();
 var exports = module.exports = {};
-var versionNumber = "0.0.333var content = ""
+var versionNumber = "0.0.3"
+var content = ""
 
 function welcomeMessage(){
     var message = "Welcome to CI/CD 101 using CircleCI!";
