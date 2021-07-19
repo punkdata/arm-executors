@@ -44,7 +44,7 @@ jobs:
           name: Create .terraformrc file locally
           command: echo "credentials \"app.terraform.io\" {token = \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
       - terraform/install:
-          terraform_version: "0.14.2"
+          terraform_version: "1.0.2"
           arch: "arm64"
           os: "linux"
       - terraform/init:
@@ -65,7 +65,7 @@ jobs:
           name: Create .terraformrc file locally
           command: echo "credentials \"app.terraform.io\" {token = \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
       - terraform/install:
-          terraform_version: "0.14.2"
+          terraform_version: "1.0.2"
           arch: "arm64"
           os: "linux"
       - terraform/init:
