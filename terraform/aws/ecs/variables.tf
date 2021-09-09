@@ -31,17 +31,17 @@ variable "iam_profile" {
 
 variable "asg_min" {
   description = "Min Instances"
-  default     = 2
+  default     = 3
 }
 
 variable "asg_max" {
   description = "Max Instances"
-  default     = 2
+  default     = 5
 }
 
 variable "asg_desired" {
   description = "AWS Desired capacity for ASG"
-  default     = 2
+  default     = 3
 }
 
 variable "docker_img_name" {
