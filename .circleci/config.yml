@@ -81,7 +81,9 @@ workflows:
     jobs:
       - run-tests
       - build_docker_image
-      - deploy_aws_ecs
+      - deploy_aws_ecs:
+          requires:
+            - build_docker_image          
       - approve_destroy:
           type: approval
           requires:

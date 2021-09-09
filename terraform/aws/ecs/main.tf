@@ -205,7 +205,8 @@ resource "aws_alb_target_group" "alb" {
   health_check {
     path                = "/"
     healthy_threshold   = 5
-    unhealthy_threshold = 5
+    unhealthy_threshold = 10
+    interval            = 30
     timeout             = 10
   }
 }
