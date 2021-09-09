@@ -56,6 +56,7 @@ jobs:
       - terraform/apply:
           path: ./terraform/aws/ecs
           var: "docker_img_name=${DOCKER_LOGIN}/${CIRCLE_PROJECT_REPONAME},docker_img_tag=0.1.<< pipeline.number >>"
+      - run: sleep 60
   destroy_aws_ecs:
     machine:
       image: ubuntu-2004:202101-01
