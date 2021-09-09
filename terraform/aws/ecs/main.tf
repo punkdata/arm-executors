@@ -202,6 +202,7 @@ resource "aws_alb_target_group" "alb" {
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.vpc.id
+  deregistration_delay  = 10
   health_check {
     path                = "/"
     healthy_threshold   = 5
@@ -209,6 +210,7 @@ resource "aws_alb_target_group" "alb" {
     interval            = 30
     timeout             = 10
   }
+
 }
 
 #AWS Application Load Balancer
