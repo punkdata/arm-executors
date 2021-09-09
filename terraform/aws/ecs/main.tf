@@ -1,7 +1,7 @@
 terraform {
   required_version = ">= 0.13.5"
   backend "remote" {
-     organization = "datapunks"
+    organization = "datapunks"
 
     workspaces {
       name = "arm-aws-ecs"
@@ -26,7 +26,7 @@ data "template_file" "task_definition_json" {
 
   vars = {
     DOCKER_IMAGE_NAME = var.docker_img_name,
-    DOCKER_IMAGE_TAG = var.docker_img_tag
+    DOCKER_IMAGE_TAG  = var.docker_img_tag
   }
 }
 
@@ -191,7 +191,7 @@ resource "aws_autoscaling_notification" "asg_notifications" {
 resource "aws_cloudwatch_log_group" "awslogs-app-arm" {
   name = "awslogs-app-arm"
   tags = {
-    team = "devrel marketing"
+    team  = "devrel marketing"
     owner = "Angel Rivera"
   }
 }
@@ -252,7 +252,7 @@ resource "aws_ecs_cluster" "app-arm-v8" {
 resource "aws_ecs_service" "app-arm-v8" {
   name                               = "srv_app-arm-v8"
   cluster                            = aws_ecs_cluster.app-arm-v8.name
-  desired_count                      = 2
+  desired_count                      = var.ecs_desired_count
   deployment_minimum_healthy_percent = 50
   deployment_maximum_percent         = 100
   task_definition                    = aws_ecs_task_definition.app-arm-v8.arn

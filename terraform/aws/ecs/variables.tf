@@ -46,13 +46,18 @@ variable "asg_desired" {
 
 variable "docker_img_name" {
   type        = string
-  description = "Name of the docker image being deployed"  
+  description = "Name of the docker image being deployed"
   default     = "ariv3ra/arm-executors"
 }
 
 variable "docker_img_tag" {
   type        = string
-  description = "The docker image TAG being deployed"  
+  description = "The docker image TAG being deployed"
   default     = "latest"
+}
+
+variable "ecs_desired_count" {
+  description = "Number of desired ECS Tasks to deploy"
+  default     = 3
 }
 
