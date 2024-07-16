@@ -27,7 +27,10 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
-      - run: touch mdp && printenv $DOCKER_PASSWORD > mdp && cat mdp | docker login --username $DOCKER_LOGIN --password-stdin
+      - run: |
+          touch mdp
+          printenv $DOCKER_PASSWORD > mdp
+          cat mdp | docker login --username $DOCKER_LOGIN --password-stdin
       - docker/build:
           image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
           tag: 0.1.<< pipeline.number >>
