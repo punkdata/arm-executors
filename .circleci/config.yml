@@ -1,13 +1,12 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@1.5.0
-  node: circleci/node@4.2.0
-  terraform: circleci/terraform@3.0.0
-  # terraform: circleci/terraform@dev:616c8e4
+  docker: circleci/docker@2.6.0
+  node: circleci/node@5.2.0
+  terraform: circleci/terraform@3.2.1 
 jobs:
   run-tests:
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:current
     resource_class: arm.medium
     steps:
       - checkout
@@ -24,7 +23,7 @@ jobs:
           path: test-results          
   build_docker_image:
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:current
     resource_class: arm.medium
     steps:
       - checkout
@@ -37,7 +36,7 @@ jobs:
           tag: 0.1.<< pipeline.number >>
   deploy_aws_ecs:
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:current
     resource_class: arm.medium
     steps:
       - checkout
@@ -59,7 +58,7 @@ jobs:
       - run: sleep 60
   destroy_aws_ecs:
     machine:
-      image: ubuntu-2004:202101-01
+      image: ubuntu-2004:current
     resource_class: arm.medium
     steps:
       - checkout
