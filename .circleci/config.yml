@@ -27,7 +27,7 @@ jobs:
     resource_class: arm.medium
     steps:
       - checkout
-      - docker/check
+      - run: touch mdp && echo $DOCKER_PASSWORD > mdp && cat mdp | docker login --username $DOCKER_LOGIN --password-stdin
       - docker/build:
           image: $DOCKER_LOGIN/$CIRCLE_PROJECT_REPONAME
           tag: 0.1.<< pipeline.number >>
